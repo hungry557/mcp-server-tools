@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 开发工作流程
+
+## 构建过程
+构建过程将TypeScript转译为JavaScript:
+- 构建命令: `npm run build` (在[package.json](mdc:package.json)中定义)
+- 监视模式: `npm run watch`
+- 输出目录: `dist/`
+
+## 添加新工具
+要添加新工具:
+
+1. 在[tools/](mdc:tools)目录中创建新文件
+2. 为工具参数定义Zod模式
+3. 在[index.ts](mdc:index.ts)中注册工具:
+   - 添加到`ListToolsRequestSchema`处理器
+   - 在`CallToolRequestSchema`处理器的switch语句中添加一个case
+
+## 测试
+- 使用检查器: `npm run inspector`
+- MCP服务器通过stdio连接
+
+
+

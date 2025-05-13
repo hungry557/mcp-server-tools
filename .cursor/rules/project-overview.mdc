@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# MCP Server Tools - 项目概览
+
+本项目实现了一个模型上下文协议(MCP)服务器，为AI模型提供实用工具。
+
+## 核心文件
+- 主入口点是 [index.ts](mdc:index.ts)，用于设置MCP服务器
+- TypeScript配置在 [tsconfig.json](mdc:tsconfig.json)
+- 包配置在 [package.json](mdc:package.json)
+
+## 工具
+tools目录包含各种实用工具的实现:
+- [tools/number.ts](mdc:tools/number.ts) - 数字运算操作
+
+## 架构
+- 服务器使用`@modelcontextprotocol/sdk`处理MCP请求
+- 工具通过MCP协议暴露
+- 每个工具都有一个用于验证的Zod模式
+
+
+

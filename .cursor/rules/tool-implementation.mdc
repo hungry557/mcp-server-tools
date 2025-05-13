@@ -1,0 +1,33 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 工具实现指南
+
+## 工具结构
+MCP Server Tools中的每个工具都遵循一致的模式:
+
+1. 用于验证的Zod模式([示例](mdc:tools/number.ts))
+2. 在服务器中注册([index.ts](mdc:index.ts))
+3. 在CallToolRequestSchema处理器中实现
+
+## 模式定义
+工具使用[Zod](mdc:https:/github.com/colinhacks/zod)进行模式验证，使用[zod-to-json-schema](mdc:https:/github.com/StefanTerdell/zod-to-json-schema)转换为JSON Schema。
+
+[tools/number.ts](mdc:tools/number.ts)中的示例:
+```typescript
+export const AddSchema = z.object({
+  a: z.number().describe("First number"),
+  b: z.number().describe("Second number"),
+});
+```
+
+## 最佳实践
+- 使用描述性参数名称
+- 使用`.describe()`为参数添加描述
+- 为每种参数类型使用适当的验证
+- 遵循TypeScript和函数式编程的最佳实践
+
+
+
