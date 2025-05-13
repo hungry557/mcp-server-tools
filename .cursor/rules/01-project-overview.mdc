@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: false
 ---
-# MCP Server Demo 项目概览
+# MCP Server Tools 项目概览
 
 这是一个基于 Model Context Protocol (MCP) 的服务器演示项目。它展示了如何使用 TypeScript 创建一个简单的 MCP 服务器工具，该工具提供了基本的数学计算功能。
 
