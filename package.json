@@ -5,16 +5,16 @@
   "type": "module",
   "author": "hungry557",
   "bin": {
-    "mcp-server-tools": "./build/index.js"
+    "mcp-server-tools": "dist/index.js"
   },
   "files": [
-    "build"
+    "dist"
   ],
   "scripts": {
     "build": "tsc && shx chmod +x dist/*.js",
     "prepare": "npm run build",
     "watch": "tsc --watch",
-    "inspector": "npx @modelcontextprotocol/inspector build/index.js"
+    "inspector": "npx @modelcontextprotocol/inspector dist/index.js"
   },
   "repository": {
     "type": "git",
