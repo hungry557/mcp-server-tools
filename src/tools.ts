@@ -1,52 +1,33 @@
 /**
- * Flomo client used to interact with the Flomo API.
+ * 用于与工具API交互的客户端。
  */
-export class toolsClient {
+export class ToolsClient {
   private readonly apiUrl: string;
+  private readonly apiKey: string;
 
   /**
-   * Create a new Flomo client.
-   * @param apiUrl - The API URL of the Flomo API.
+   * 创建一个新的工具客户端。
+   * @param apiUrl - 工具API的URL地址。
+   * @param apiKey - 工具API的密钥。
    */
-  constructor({ apiUrl }: { apiUrl: string }) {
+  constructor({ apiUrl, apiKey }: { apiUrl: string; apiKey: string }) {
     this.apiUrl = apiUrl;
+    this.apiKey = apiKey;
   }
 
   /**
-   * Write a note to Flomo.
-   * @param content - The content of the note.
-   * @returns The response from the Flomo API.
+   * 计算两个数字的和。
+   * @param a - 第一个数字。
+   * @param b - 第二个数字。
+   * @returns 两个数字的和。
    */
-  async writeNote({ content }: { content: string }) {
+  async add({ a, b }: { a: number; b: number }) {
     try {
-      if (!content) {
-        throw new Error("invalid content");
+      if (!a || !b) {
+        throw new Error("invalid params");
       }
 
-      const req = {
-        content,
-      };
-
-      const resp = await fetch(this.apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req),
-      });
-
-      if (!resp.ok) {
-        throw new Error(`request failed with status ${resp.statusText}`);
-      }
-
-      let result = await resp.json();
-
-      if (result && result.memo && result.memo.slug) {
-        const memoUrl = `https://v.flomoapp.com/mine/?memo_id=${result.memo.slug}`;
-        result.memo.url = memoUrl;
-      }
-
-      return result;
+      return a + b;
     } catch (e) {
       throw e;
     }

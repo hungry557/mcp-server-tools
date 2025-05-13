@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * This is a MCP server that call flomo api to write notes.
- * It demonstrates core MCP concepts like tools by allowing:
- * - Writing notes to flomo via a tool
+ * 这是一个调用flomo API写笔记的MCP服务器。
+ * 它通过允许以下功能来演示MCP核心概念（如工具）：
+ * - 通过工具向flomo写入笔记
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -13,7 +13,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { toolsClient } from "./tools.js";
+import { ToolsClient } from "./tools.js";
 import { RestServerTransport } from "@chatmcp/sdk/server/rest.js";
 
 const api_url = getParamValue("api_url") || "";
@@ -24,7 +24,7 @@ const port = getParamValue("port") || 9593;
 const endpoint = getParamValue("endpoint") || "/rest";
 
 /**
- * Create an MCP server with capabilities for tools.
+ * 创建一个具有工具功能的MCP服务器。
  */
 const server = new Server(
   {
@@ -39,24 +39,28 @@ const server = new Server(
 );
 
 /**
- * Handler that lists available tools.
- * Exposes a single "write_note" tool that lets clients create new notes.
+ * 列出可用工具的处理程序。
+ * 提供一个单一的"write_note"工具，让客户端创建新笔记。
  */
 server.setRequestHandler(ListToolsRequestSchema, async (request) => {
   return {
     tools: [
       {
-        name: "write_note",
-        description: "Write note to flomo",
+        name: "add",
+        description: "Add two numbers",
         inputSchema: {
           type: "object",
           properties: {
-            content: {
-              type: "string",
-              description: "Text content of the note with markdown format",
+            a: {
+              type: "number",
+              description: "First number",
+            },
+            b: {
+              type: "number",
+              description: "Second number",
             },
           },
-          required: ["content"],
+          required: ["a", "b"],
         },
       },
     ],
@@ -64,38 +68,38 @@ server.setRequestHandler(ListToolsRequestSchema, async (request) => {
 });
 
 /**
- * Handler for the write_note tool.
- * Creates a new note with the content, save to flomo and returns success message.
+ * write_note工具的处理程序。
+ * 创建带有内容的新笔记，保存到flomo并返回成功消息。
  */
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const apiUrl = api_url || getAuthValue(request, "api_url");
+  const apiKey = api_key || getAuthValue(request, "api_key");
   if (!apiUrl) {
     throw new Error("API URL not set");
   }
+  if (!apiKey) {
+    throw new Error("API KEY not set");
+  }
 
   switch (request.params.name) {
-    case "write_note": {
-      const content = String(request.params.arguments?.content);
-      if (!content) {
-        throw new Error("Content is required");
+    case "add": {
+      const a = Number(request.params.arguments?.a);
+      const b = Number(request.params.arguments?.a);
+      if (!a) {
+        throw new Error("A is required");
+      }
+      if (!b) {
+        throw new Error("B is required");
       }
 
-      const flomo = new toolsClient({ apiUrl });
-      const result = await flomo.writeNote({ content });
-
-      if (!result.memo || !result.memo.slug) {
-        throw new Error(
-          `Failed to write note to flomo: ${result?.message || "unknown error"}`
-        );
-      }
+      const tools = new ToolsClient({ apiUrl, apiKey });
+      const result = await tools.add({ a, b });
 
       return {
         content: [
           {
             type: "text",
-            text: `Write note to flomo success, result: ${JSON.stringify(
-              result
-            )}`,
+            text: result,
           },
         ],
       };
@@ -107,8 +111,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 
 /**
- * Start the server using stdio transport.
- * This allows the server to communicate via standard input/output streams.
+ * 使用stdio传输启动服务器。
+ * 这允许服务器通过标准输入/输出流进行通信。
  */
 async function main() {
   if (mode === "rest") {
