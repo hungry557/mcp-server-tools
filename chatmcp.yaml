@@ -1,0 +1,64 @@
+name: tools
+
+params:
+  type: object
+  properties:
+    API_URL:
+      type: string
+      description: API URL
+    API_KEY:
+      type: string
+      description: API KEY
+  required:
+    - API_URL
+    - API_KEY
+
+rest:
+  port: 9593
+  endpoint: /rest
+
+npx:
+  command:
+    | API_URL={API_URL} API_KEY={API_KEY} npx -y @hungry557/mcp-server-tools
+  config:
+    | {
+        "mcpServers": {
+          "tools": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@hungry557/mcp-server-tools"
+            ],
+            "env": {
+              "API_URL": "YOUR_API_URL_HERE",
+              "API_KEY": "YOUR_API_KEY_HERE"
+            }
+          }
+        }
+      }
+
+docker:
+  command:
+    | docker run -i --rm -e API_URL={API_URL} -e API_KEY={API_KEY} hungry557/tools
+  config:
+    | {
+        "mcpServers": {
+          "tools": {
+            "command": "docker",
+            "args": [
+              "run",
+              "-i",
+              "--rm",
+              "-e",
+              "API_URL",
+              "-e",
+              "API_KEY",
+              "hungry557/tools"
+            ],
+            "env": {
+              "API_URL": "YOUR_API_URL_HERE",
+              "API_KEY": "YOUR_API_KEY_HERE"
+            }
+          }
+        }
+      }
