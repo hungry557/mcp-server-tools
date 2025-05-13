@@ -2,9 +2,7 @@
   "name": "@hungry557/mcp-server-tools",
   "version": "0.0.1",
   "description": "mcp server tools",
-  "private": false,
   "type": "module",
-  "homepage": "https://github.com/hungry557/mcp-server-tools",
   "author": "hungry557",
   "bin": {
     "mcp-server-tools": "./build/index.js"
@@ -13,17 +11,34 @@
     "build"
   ],
   "scripts": {
-    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+    "build": "tsc && shx chmod +x dist/*.js",
     "prepare": "npm run build",
     "watch": "tsc --watch",
     "inspector": "npx @modelcontextprotocol/inspector build/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hungry557/mcp-server-tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hungry557/mcp-server-tools/issues"
+  },
+  "homepage": "https://github.com/hungry557/mcp-server-tools",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@chatmcp/sdk": "^1.0.5",
-    "@modelcontextprotocol/sdk": "0.6.0"
+    "@modelcontextprotocol/sdk": "1.0.1",
+    "@types/node": "^22",
+    "@types/node-fetch": "^2.6.12",
+    "node-fetch": "^3.3.2",
+    "universal-user-agent": "^7.0.2",
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.23.5"
   },
   "devDependencies": {
-    "@types/node": "^20.11.24",
-    "typescript": "^5.3.3"
+    "shx": "^0.3.4",
+    "typescript": "^5.6.2"
   }
 }
