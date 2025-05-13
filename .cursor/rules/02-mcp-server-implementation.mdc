@@ -1,0 +1,36 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# MCP 服务器实现详解
+
+## 服务器配置
+
+[src/index.ts](mdc:src/index.ts) 文件实现了一个 MCP 服务器，支持两种传输模式：
+
+1. **stdio 模式**（默认）：通过标准输入/输出流进行通信
+2. **REST 模式**：通过 HTTP REST API 提供服务
+
+服务器可以通过环境变量配置：
+- `mode`: 传输模式 ("stdio" 或 "rest")
+- `port`: REST 模式下的端口号 (默认 9593)
+- `endpoint`: REST 模式下的端点路径 (默认 "/rest")
+- `api_url` 和 `api_key`: 用于工具客户端的 API 凭据
+
+## 工具实现
+
+服务器提供了一个 `add` 工具，用于计算两个数字的和。工具逻辑在 [src/tools.ts](mdc:src/tools.ts) 中实现。
+
+工具处理流程：
+1. 服务器接收工具调用请求
+2. 验证 API 凭据
+3. 根据工具名称分发请求
+4. 执行对应的工具逻辑并返回结果
+
+## 部署选项
+
+[chatmcp.yaml](mdc:chatmcp.yaml) 定义了两种部署方式：
+1. 使用 NPX 运行
+2. 使用 Docker 容器运行
+

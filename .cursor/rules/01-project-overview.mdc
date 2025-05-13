@@ -1,0 +1,22 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# MCP Server Demo 项目概览
+
+这是一个基于 Model Context Protocol (MCP) 的服务器演示项目。它展示了如何使用 TypeScript 创建一个简单的 MCP 服务器工具，该工具提供了基本的数学计算功能。
+
+## 项目结构
+
+- [package.json](mdc:package.json) - 项目的包配置文件，定义了依赖项和脚本命令
+- [src/index.ts](mdc:src/index.ts) - MCP 服务器的主入口文件，负责设置服务器和处理工具请求
+- [src/tools.ts](mdc:src/tools.ts) - 定义了工具客户端类和实现工具逻辑
+- [chatmcp.yaml](mdc:chatmcp.yaml) - MCP 服务器配置文件，包含 REST API 和部署信息
+- [build/](mdc:build) - 编译后的 JavaScript 文件目录
+- [tsconfig.json](mdc:tsconfig.json) - TypeScript 配置文件
+
+## 主要功能
+
+该项目是一个 MCP 服务器，当前实现了一个简单的加法工具 `add`，可以计算两个数字的和。
+
