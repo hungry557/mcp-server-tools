@@ -13,19 +13,12 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { getParamValue, getAuthValue } from "@chatmcp/sdk/utils/index.js";
 import { RestServerTransport } from "@chatmcp/sdk/server/rest.js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-
+import { VERSION } from "./common/version.js";
+import { mode, port, endpoint } from "./common/utils.js";
 import * as number from "./tools/number.js";
-
-const apiUrl = getParamValue("api_url") || "";
-const apiKey = getParamValue("api_key") || "";
-
-const mode = getParamValue("mode") || "stdio";
-const port = getParamValue("port") || 9593;
-const endpoint = getParamValue("endpoint") || "/rest";
 
 /**
  * MCP服务器实例
@@ -35,7 +28,7 @@ const endpoint = getParamValue("endpoint") || "/rest";
 const server = new Server(
   {
     name: "mcp-server-tools",
-    version: "0.0.1",
+    version: VERSION,
   },
   {
     capabilities: {
