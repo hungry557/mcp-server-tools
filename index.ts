@@ -13,10 +13,19 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import { getParamValue, getAuthValue } from "@chatmcp/sdk/utils/index.js";
+import { RestServerTransport } from "@chatmcp/sdk/server/rest.js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
 import * as number from "./tools/number.js";
+
+const apiUrl = getParamValue("api_url") || "";
+const apiKey = getParamValue("api_key") || "";
+
+const mode = getParamValue("mode") || "stdio";
+const port = getParamValue("port") || 9593;
+const endpoint = getParamValue("endpoint") || "/rest";
 
 /**
  * MCP服务器实例
@@ -99,12 +108,28 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
  * @returns {Promise<void>}
  */
 async function runServer() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error("MCP Server Tools running on stdio");
+  try {
+    // after: MCP Server run with rest transport and stdio transport
+    if (mode === "rest") {
+      const transport = new RestServerTransport({
+        port,
+        endpoint,
+      });
+      await server.connect(transport);
+
+      await transport.startServer();
+
+      return;
+    }
+
+    // before: MCP Server only run with stdio transport
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+    console.error("MCP Server Tools running on stdio");
+  } catch (error) {
+    console.error("Fatal error running server:", error);
+    process.exit(1);
+  }
 }
 
-runServer().catch((error) => {
-  console.error("Fatal error in main():", error);
-  process.exit(1);
-});
+runServer();
