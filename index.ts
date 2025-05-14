@@ -68,21 +68,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
  */
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
-    if (!request.params.arguments) {
-      throw new Error("Arguments are required");
+    const { name, arguments: args } = request.params;
+    if (!args) {
+      throw new Error("No arguments provided");
     }
 
-    switch (request.params.name) {
+    switch (name) {
       case "add": {
-        const args = number.AddSchema.parse(request.params.arguments);
+        const parsedArgs = number.AddSchema.parse(args);
 
         return {
-          content: [{ type: "text", text: String(args.a + args.b) }],
+          content: [
+            { type: "text", text: String(parsedArgs.a + parsedArgs.b) },
+          ],
         };
       }
 
       default:
-        throw new Error(`Unknown tool: ${request.params.name}`);
+        throw new Error(`Unknown tool: ${name}`);
     }
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -125,4 +128,7 @@ async function runServer() {
   }
 }
 
-runServer();
+runServer().catch((error) => {
+  console.error("Fatal error running server:", error);
+  process.exit(1);
+});
